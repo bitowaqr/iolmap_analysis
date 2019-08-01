@@ -6,11 +6,11 @@
 ### Where should new parkrun events be located? Modelling the potential impact of 200 new events on socio-economic inequalities in access and participation.
 
 
-  *Schneider PP^1^, Smith R^1^, Bullas A^2^, Bayley  T^1^, Haake SSJ^2^, Brennan A^1^, Goyder E^1^*
+  *Schneider PP<sup>1</sup>, Smith R<sup>1</sup>, Bullas A<sup>2</sup>, Bayley  T<sup>1</sup>, Haake SSJ<sup>2</sup>, Brennan A<sup>1</sup>, Goyder E<sup>1</sup>*
 
 
-  <sub>*^1^School of Health and Related Research, University of Sheffield, Sheffield, UK.*  </sub> 
-  <sub>*^2^Advanced Wellbeing Research Centre, Sheffield Hallam University, Sheffield, UK.* </sub> 
+  <sub>*<sup>1</sup>School of Health and Related Research, University of Sheffield, Sheffield, UK.*  </sub>  
+  <sub>*<sup>2</sup>Advanced Wellbeing Research Centre, Sheffield Hallam University, Sheffield, UK.* </sub> 
 
 
 <br> 
