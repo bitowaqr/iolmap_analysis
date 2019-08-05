@@ -1,6 +1,8 @@
 
 # ANALYSIS src
-# Code to produce the results reported in the publication
+# Code to reproduce the results reported in the publication
+# source("./src/src3_recommendations.R")  # required
+
 
 # 1 SOME DESCRITPIVE STATS ---------------
      

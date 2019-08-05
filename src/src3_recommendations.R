@@ -1,7 +1,7 @@
 
 ### OPTIMAL NEW PARKRUN LOCATIONS
-source("./src/src1_functions.R")
-source("./src/src2_data_proc.R")
+# Code to reproduce optimal new parkrun event recommendations
+# source("./src/src2_data_proc.R")  # required
     
     time1 = Sys.time() # keeps track of time
     

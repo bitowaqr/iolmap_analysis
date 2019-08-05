@@ -3,7 +3,7 @@
 
 # LOAD FUNCTIONS + PACKAGES
   # Load functions
-    source("./src/src1_functions.R")
+  #  source("./src/src1_functions.R") # required
   
   # Install and load all required packages
     install_n_load(c("raster",
