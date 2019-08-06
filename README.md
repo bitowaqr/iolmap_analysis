@@ -15,7 +15,11 @@
 
 <br> 
 
+  Preprint: [A link to MedRvix will be provided soon]()
+
   Publication: [A link to the study will be provided here when it is published]()
+  
+  Interactive Online map: [link](http://iol-map.shef.ac.uk/)
 
 
 ****
@@ -30,19 +34,19 @@
 
 ##### Methods
 
-  We conducted an ecological (spatial) analysis, using data on parkrun events, public green spaces, and English census areas. Poisson regression was applied to investigate the relationships between the distances to events, deprivation, and parkrun participation rates. Model estimates were incorporated into a location allocation analysis, to identify locations for future events that maximise deprivation-weighted parkrun participation.
+  We conducted an ecological spatial analysis, using data on 455 parkrun events, 2,842 public green spaces, and 32,844 English census areas. Poisson regression was applied to investigate the relationships between the distances to events, deprivation, and parkrun participation rates. Model estimates were incorporated into a location-allocation analysis, to identify locations for future events that maximise deprivation-weighted parkrun participation.
 
 <br> 
 
 ##### Results
   
-  The distance to the nearest event (in km) and the Index of Multiple Deprivation (score) were both independently negatively associated with the parkrun participation rate. Rate ratios were 0.921 (95%CI = 0.921-0.922) and 0.959 (0.959-0.959), respectively. The identified 200 locations for new events were estimated to increase weekly runs by 6.9% (from 82,824 to 88,506). Of the additional runs, 4.1% (n=231) would come from the 10% most deprived communities.
+  The distance to the nearest event (in km) and the Index of Multiple Deprivation (score) were both independently negatively associated with local parkrun participation rates. Rate ratios were 0.921 (95%CI = 0.921-0.922) and 0.959 (0.959-0.959), respectively. The recommended 200 new event locations were estimated to increase weekly runs by 6.9% (from 82,824 to 88,506). Of the additional runs, 4.1% (n=231) were expected to come from the 10% most deprived communities.
 
 <br> 
 
 ##### Conclusion
   
-  Participation in parkrun is wide spread across England. We provide recommendations on where new parkrun events should be set up to increase participation from deprived communities. However, the creation of new events alone is unlikely to be an effective strategy. Further research is needed to study how barriers to participation can be reduced.
+  Participation in parkrun is wide spread across England. We provide recommendations for new parkrun event location, in order to increase participation from deprived communities. However, the creation of new events alone is unlikely to be an effective strategy. Further research is needed to study how barriers to participation can be reduced.
 
 
 ****
