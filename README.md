@@ -16,10 +16,8 @@
 <br> 
 
   Preprint: [A link to MedRvix will be provided soon]()
-
-  Publication: [A link to the study will be provided here when it is published]()
   
-  Interactive Online map: [link](http://iol-map.shef.ac.uk/) ([source code](https://github.com/bitowaqr/iol_map))
+  Interactive Online map: [link](https://iolmap.shinyapps.io/parkrun/) ([source code](https://github.com/bitowaqr/iol_map))
 
 ****
 
