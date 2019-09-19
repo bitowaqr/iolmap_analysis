@@ -15,7 +15,7 @@
 
 <br> 
 
-  Preprint: [A link to MedRvix will be provided soon]()
+  Preprint: [link](https://www.medrxiv.org/content/10.1101/19004143v1)
   
   Interactive Online map: [link](https://iolmap.shinyapps.io/parkrun/) ([source code](https://github.com/bitowaqr/iol_map))
 
