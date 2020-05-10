@@ -50,12 +50,12 @@
       
     # parkrun event data 
       # Parkrun UK. 2019. 
-      # (Manuall) retrieved from: http://www.parkrun.org.uk/
-      event_info = read.csv("./input/parkrun_data/event_info_scraped_10.12.18.csv", stringsAsFactors = F)
+      # Retrieved from: http://www.parkrun.org.uk/
+      event_sp = read.csv("./input/parkrun_data/events_corrected.csv", stringsAsFactors = F)
     
     # LSOA parkrun participation data (raw data from parkrunUK, filtered and processed)
       # Parkrun UK. 2018. 
-      runs_per_lsoa = read.csv("./input/parkrun_data/runs_per_lsoa_010117_101218.csv", stringsAsFactors = F)
+      runs_per_lsoa = read.csv("./input/parkrun_data/runs_per_lsoa_010118_101218.csv", stringsAsFactors = F)
     
 
       
@@ -85,28 +85,15 @@
       lsoa_sp@data$week = 49
     
     # prepare imd scores 
-      is_score_values = grepl("score",names(lsoa_imd), ignore.case=T)
-      is_code = grepl("LSOA.code..2011.",names(lsoa_imd), ignore.case=T)
-      lsoa_imd = lsoa_imd[,is_code | is_score_values]
-      lsoa_imd = dplyr::rename(lsoa_imd, code = LSOA.code..2011.)
-      names(lsoa_imd)[c(2:9)] = c("imd_sc","income_sc","employ_sc","educ_sc","health_sc","crime_sc","housing_sc","envir_sc")
-      # we only use multiple deprivation index - remove other var 
-      lsoa_imd = lsoa_imd[,c("code","imd_sc")] 
+      lsoa_imd = lsoa_imd %>% 
+        dplyr::rename(code = LSOA.code..2011.) %>% 
+        dplyr::rename(imd_sc = 'Index.of.Multiple.Deprivation..IMD..Score') %>%
+        dplyr::select(c("code","imd_sc"))
       lsoa_sp = merge(lsoa_sp,lsoa_imd,by=c("code"),sort=F)
   
   # PARKRUN EVENTS
-      event_sp =  event_info
       coordinates(event_sp) = ~lng+lat
       projection(event_sp) = "+proj=longlat +ellps=WGS84"
-    # exclude non english parkruns
-      # england_sp = maptools::unionSpatialPolygons(lsoa_sp, IDs = rep("England",times=dim(lsoa_sp)[1]))
-      events_in_england = rgeos::gIntersects(england_sp,event_sp, byid = T)
-      event_sp = subset(event_sp,events_in_england[,1])
-    # exclude prison parkruns
-      prisonruns = c("berwyn","bickershaw","blackcombe","cromhall","feltham","hilltop","keppel","lowerdrummans","springhill","warrenhill","wayland")
-      inPrisons =  event_sp$course %in% prisonruns
-      event_sp = subset(event_sp,!inPrisons)
-      
       
   # GREENSPACES 
       # trimming of the original data set (data cannot be provided via this repository due to file size restrictions)
@@ -152,19 +139,13 @@
     
   
   # PARTICIPATION data
-    # prepare runs per week, per 1,000 population etc
-      runs_per_lsoa$run_count.week = runs_per_lsoa$run_count/49 # 49 weeks observational period
+    # prepare runs per week, per 1,000 population 
       lsoa_sp = merge(lsoa_sp,runs_per_lsoa,by="code",sort=F)
       lsoa_sp$run_count[is.na(lsoa_sp$run_count)] = 0
-      lsoa_sp$run_count.week[is.na(lsoa_sp$run_count.week)] = 0
-      lsoa_sp$run_rate.week = lsoa_sp$run_count.week/lsoa_sp$pop
-      lsoa_sp$run_rate = lsoa_sp$run_count/lsoa_sp$pop
-      lsoa_sp$runs_pmil = lsoa_sp$run_rate * 1000
-      lsoa_sp$runs_pmil.week = lsoa_sp$run_rate.week * 1000
-    
-
+      lsoa_sp$runs_pmil.week = ((lsoa_sp$run_count/49)/lsoa_sp$pop)*1000 # 49 weeks observational period
+      
 # CLEAN UP
-    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","runs_per_lsoa","is_code","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_cntrds_coord_df","is_score_values","lsoa_pop","lsoa_cntrds","lsoa_cntrds_coord","events_in_england","event_info","prisonruns","inPrisons"))
+    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","runs_per_lsoa","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_cntrds_coord_df","lsoa_pop","lsoa_cntrds","lsoa_cntrds_coord","events_in_england","prisonruns","inPrisons"))
   
 # SAVE the created data sets (saves time for later use)
     save(list=c("dist_M_full","event_sp","greens_sp","lsoa_min_dist","lsoa_sp"),
