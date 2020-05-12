@@ -39,12 +39,6 @@
   parkrun UK (2019). Manually retrieved from: https://www.parkrun.org.uk/events/  
   Provided under a CC BY-NC-ND license.
   
-  <br>
-  
-##### parkrun participation data 
-  parkrun UK (2018). parkrun participation in England (per LSOA) from 01.01.2017 to 10.12.2018. 
-  Provided under a CC BY-NC-ND license.
-  
   
   <br>
   <br>

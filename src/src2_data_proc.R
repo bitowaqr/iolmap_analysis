@@ -51,11 +51,11 @@
     # parkrun event data 
       # Parkrun UK. 2019. 
       # Retrieved from: http://www.parkrun.org.uk/
-      event_sp = read.csv("./input/parkrun_data/events_corrected.csv", stringsAsFactors = F)
+      event_sp = read.csv("./input/parkrun_data/event_info_20181231.csv", stringsAsFactors = F)
     
     # LSOA parkrun participation data (raw data from parkrunUK, filtered and processed)
       # Parkrun UK. 2018. 
-      runs_per_lsoa = read.csv("./input/parkrun_data/runs_per_lsoa_010118_101218.csv", stringsAsFactors = F)
+      # runs_per_lsoa = read.csv("./input/parkrun_data/runs_per_lsoa_010118_101218.csv", stringsAsFactors = F)
     
 
       
@@ -81,8 +81,8 @@
       lsoa_pop$pop_km2 = as.numeric(gsub(",","",lsoa_pop$pop_km2))
       lsoa_sp = merge(lsoa_sp,lsoa_pop,by=c("code"),sort=F)
     
-    # add time var (observational period = 49 weeks)
-      lsoa_sp@data$week = 49
+    # # add time var (observational period = 49 weeks)
+    #   lsoa_sp@data$week = 49
     
     # prepare imd scores 
       lsoa_imd = lsoa_imd %>% 
@@ -138,15 +138,15 @@
       event_sp = merge(event_sp,srvd_pop,by="course")
     
   
-  # PARTICIPATION data
-    # prepare runs per week, per 1,000 population 
-      lsoa_sp = merge(lsoa_sp,runs_per_lsoa,by="code",sort=F)
-      lsoa_sp$run_count[is.na(lsoa_sp$run_count)] = 0
-      lsoa_sp$runs_pmil.week = ((lsoa_sp$run_count/49)/lsoa_sp$pop)*1000 # 49 weeks observational period
-      
+  # # PARTICIPATION data
+  #   # prepare runs per week, per 1,000 population
+  #     lsoa_sp = merge(lsoa_sp,runs_per_lsoa,by="code",sort=F)
+  #     lsoa_sp$run_count[is.na(lsoa_sp$run_count)] = 0
+  #     lsoa_sp$runs_pmil.week = ((lsoa_sp$run_count/49)/lsoa_sp$pop)*1000 # 49 weeks observational period
+    
 # CLEAN UP
     rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","runs_per_lsoa","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_cntrds_coord_df","lsoa_pop","lsoa_cntrds","lsoa_cntrds_coord","events_in_england","prisonruns","inPrisons"))
-  
+
 # SAVE the created data sets (saves time for later use)
     save(list=c("dist_M_full","event_sp","greens_sp","lsoa_min_dist","lsoa_sp"),
          file = paste("./output/savegame_", Sys.Date(),".Rdata",sep=""))
