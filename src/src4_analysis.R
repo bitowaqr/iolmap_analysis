@@ -15,9 +15,6 @@
     length(event_sp$course) # n parkrun events
     summary.stats(event_sp$srvd_pop) # served population
     summary.stats(event_sp$srvd_lsoa) # served LSOA
-    summary.stats( event_sp$Mn_prtc) # mean participants per event
-    summary.stats( event_sp$Mn_vlnt) # mean volunteers
-    summary.stats(event_sp$Age_yrs) # age of events 
     
     # pop living_within_1km 
     round(sum(lsoa_sp$pop[lsoa_sp$mn_dstn<=1])/sum(lsoa_sp$pop),4)*100
