@@ -27,6 +27,16 @@ install_n_load = function(package){
    round(res,round.dec) 
   }
   
+# format descriptive tbl 
+  format.tbl = function(desc_tbl1,cols){
+    desc_tbl1 = cbind(paste(desc_tbl1$mean.d," (",desc_tbl1$sd.d,")",sep=""),
+                      paste(desc_tbl1$median.d," (",desc_tbl1$q25.d,";",desc_tbl1$q75.d ,")",sep=""),
+                      paste(desc_tbl1$min.d,"-",desc_tbl1$max.d,sep=""))
+    rownames(desc_tbl1) = cols
+    colnames(desc_tbl1) = c("Mean (SD)","Median (Q25-Q75)","Range")
+    return(desc_tbl1)
+  }
+  
 # n % living within x km
   catch_pop = function(x,dist = lsoa_sp$mn_dstn ){
     paste(round(sum(lsoa_sp$pop[dist<=x])/sum(lsoa_sp$pop),4)*100,"/ ", formatC(sum(lsoa_sp$pop[dist<=x]),format="f",big.mark = ","))

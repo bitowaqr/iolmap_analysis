@@ -4,16 +4,23 @@
 # 1  Descriptive stats ---------------
      
   # LSOA
-    length(lsoa_sp$code) # n LSOAs
-    summary.stats(lsoa_sp$pop) # population
-    summary.stats(lsoa_sp$imd_sc) # deprivation indices
-    summary.stats(lsoa_sp$mn_dstn) # distances to the nearest event
-  
+    length(lsoa_sp$code) # n LSOAs  
+    desc_tbl1 =rbind(
+      summary.stats(lsoa_sp$pop), # population
+      summary.stats(lsoa_sp$imd_sc), # deprivation indices
+      summary.stats(lsoa_sp$mn_dstn)) # distances to the nearest event
+    desc_tbl1 = format.tbl(desc_tbl1 = desc_tbl1,cols=c("Population","IMD","Distance to the nearest event"))
+    # desc_tbl1
+
   # events
     length(event_sp$course) # n parkrun events
-    summary.stats(event_sp$srvd_pop) # served population
-    summary.stats(event_sp$srvd_lsoa) # served LSOA
-  
+    desc_tbl2 =rbind(
+      summary.stats(event_sp$srvd_pop), # served population
+      summary.stats(event_sp$srvd_lsoa)) # served LSOA
+    desc_tbl2 = format.tbl(desc_tbl2,cols=c("Catchment area population","Catchment area LSOAs"))
+    # desc_tbl2
+    save(list= c("desc_tbl1","desc_tbl2"),file = "./output/desc_tbls.RDS")
+    
   # green spaces    
     summary.stats(greens_sp$area_km2) # green space areas
     
