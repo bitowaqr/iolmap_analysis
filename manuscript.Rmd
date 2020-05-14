@@ -30,101 +30,153 @@ The aims of this study are two-fold: firstly, to evaluate whether geographic acc
 
 ## Methods
 
+### Study design
+
+  This study is a cross-sectional ecological analysis of the socio-economic disparities in geographic access to parkrun events in England at the end of 2018. All analyses were conducted on the level of Lower Layer Super Output Areas (LSOAs), which divide England into 32,844 geographic units with, on average, have a population of approximately 1,700. We assessed the relationship between access, defined as the distance (as the crow flies) to the nearest parkrun event, and socio-economic deprivation, measured using the Index of Multiple Deprivation. In addition, we used information on green spaces in England to conducted a simple location-allocation analysis, in order to identify 200 locations for future parkrun events, that maximise access for access for the population.
 
 
+### Data sources
+
+  For this study, we combined data on three types of geospatial entities: 1) LSOAs, 2) parkrun event locations, and 3) public green spaces.
+
+  1) The geographic locations of all 32,844 LSOAs, defined by the coordinates of its population-weighted centroid, 2017 total population estimates, and the 2015 Index of Multiple Deprivation (IMD) were retrieved from the Office for National Statistics [@ons2018; @ref; @ref].
+
+  2) We included all 465 public parkrun events which were in operation in England by December 12th 2018 - on this date, Sport England announced that their plan to provide funding for setting up 200 additional parkrun events across England.[@ref] The coordinates of all 465 events were manually scrapped from the parkrun UK website.[@ref]
+
+  3) The location coordinates of 143,822 public green spaces were retrieved from an open dataset of Ordnance Survey.[9] parkrun events are held in various settings and terrains, and not always require a 5km loop - some events have courses that involve running back and forth. After evaluating existing parkrun event courses, we decided to consider all public parks, gardens, and playing fields in England with an area of 0.1 km$^2$ (e.g. 316m x 316m) or more potentially suitable for hosting events (n=2,842). 
 
 
+### Variables
+
+  Access to parkrun was measured in terms of the distance (as the crow flies) to the nearest event. For each of the 32,844 LSOAs, we computed the geodesic distances between its population-weighted centroid and all 465 parkun events and then selected the shortest distance (in km).
+
+  The socio-economic deprivation of LSOAs was measured using IMD. It is a measure of measure of relative deprivation, which combines 37 indicators from seven domains (income, employment, education and skills, health and disability, crime, housing and services, and living environment) into a single score. The score ranges from 0 (least deprived) to 100 (most deprived).[@smith2015] 
+
+  Further covariates (e.g. population density or demographics), which are likely to affect the availability of parkrun events, were not taken into account, because we did not aim to assess to what extent deprivation independently 'explains' access. Rather, we sought to evaluate whether or not people living in deprived areas actually have better or worse access, given all other circumstances.
 
 
+### Analysis
 
+  Mean, standard deviation, median, interquartile range, and range were used as descriptive statistics. The correlation between IMD and the distance to the nearest parkrun event on the LSOA level were investigated using the Pearson and Spearman method. The correlation coefficients were computed using the LSOAs' total population as weights. A scatter plot with a fitted linear regression model are presented to illustrate the relationship. Our hypothesis was that more deprived areas had worse access, i.e. longer distances to the nearest parkrun event than more affluent areas.
 
+#### Identifying optimal locations for new parkrun events
 
+  We conducted a location-allocation analysis to solve the following problem: parkrun UK received funding to start 200 additional parkrun events. There are 2,842 public green spaces in England in which new events could be set up. Which 200 locations should be selected, in order to maximise access for the greatest number of people?
 
-
-
-
-
-This study is an ecological analysis of the geographic and socio-economic disparities in participation in parkrun events in England. The observational period covered 49 weeks in 2018 (1st January to 10th December). All analyses were conducted on the level of Lower Layer Super Output Area (LSOA). LSOAs are census areas with a population of approximately 1,700, which divide England into 32,844 geographic units. 
-
-\bigskip
-
-We collected and combined location (longitude and latitude) and attribute data of LSOAs with information on parkrun events and public green spaces. An overview of the relevant measures and the data sources is provided in Table 1.
-
-\bigskip
-
-In this study, we included all 455 English parkrun events which were in operation during the observational period. Events held in prisons (n=7) were excluded. Data on 143,822 public green spaces were retrieved from an open dataset of Ordnance Survey.[9] In the absence of more detailed information (e.g. terrain), we considered all public parks, gardens, and playing fields in England with an area of 0.1 km$^2$ (e.g. 316m x 316m) or more potentially suitable for hosting parkrun events (n=2,842). We set this lower bound in order to improve the specificity of our estimates and avoid identifying very small community parks. At the same time we wanted to ensure that parks such as mileend park (which has a parkrun and is 0.014 km$^2$) would be identified in our analysis. 
-
-<!--# %%% TABLE 1 %%%
-# \begin{figure}[!t]
-#     \centering
-#     \includegraphics[width=1\textwidth]{tbl1.jpg}
-#     \label{fig:tbl1}
-# \end{figure}-->
-
-\bigskip
-
-\subsection*{Analysis}
-Mean, standard deviation, median, interquartile range, and range were used as descriptive statistics. The associations between IMD, distance to the nearest parkrun event, and parkrun participation on the LSOA level were investigated using generalised linear models with a Poisson distribution and a log link. The dependent variable was the total number of runs between 1st January and 10th December 2018. To model the outcome as a rate (runs per 1,000 population per week), the log of the person weeks was used as an offset variable.
-
-\bigskip
-
-We first fitted bivariate models to study the effect of IMD and distance on participation separately. The correlation between both predictors was assessed using Pearson’s correlation coefficient. Subsequently, we used a multivariable model to investigate the independent effects of IMD and distance on participation. The Akaike (AIC) and the Bayesian Information Criterion (BIC), as well as the McFadden’s pseudo R$^{2}$ were used to assess model fit.
+  More specifically, the objective was to minimise the population-weighted total sum of distances between all LSOAs and their nearest parkrun event. To identify the optimal 200 green spaces, we applied a simple greedy algorithm that consisted of two steps. Firstly, for each green space, we evaluate how setting up a parkrun event would affect the sum of distances, given the locations of all existing events (i.e. for how many LSOAs would this green space then be the nearest parkrun event, and by how much would it decrease the respective distances). Secondly, the green space with the greatest effect is selected and added to the set of existing parkrun events. This procedure is repeated 200 times.
 
 \bigskip
 
-\subsection*{Identifying optimal locations for new parkrun events}
+  More formally, the first step of the algorithm is defined by the following equation:
 
-\subsubsection*{Rationale and objective}
+$$\underset{c\in C}{\operatorname{arg min}}\sum_{i=1}^{32,844}{ d_i(E \cap c) * p_{i}}$$
 
-We conducted a location-allocation analysis to solve the following problem: parkrun UK received funding to start 200 additional parkrun events. There are 2,842 public green spaces in England in which new events could be set up. Which 200 locations should be selected?
+  The function yields the candidate green space $c$, from the set of all 2,842 green spaces $C$, which minimises the sum of the products of the minimum distances and the total population of all LSOAs, whereby $p_i$ denotes the population of LSOA $i$, and $d_i(E \cap c)$ denotes the distance to the nearest parkrun event, which can either be an existing event from the set $E = \{e_{1},e_{2},...,e_{465}\}$, or the candidate green space $c$, whichever is nearest.  
 
-\bigskip
-
-parkrun’s stated aim of ‘increasing participation from lower socio-economic groups’[8] was operationalised in the following way: \textit{find the set of 200 green spaces, which maximise the number of additional runs at parkrun events, weighted by LSOAs’ squared IMD scores}. By using the squared IMD scores as weights, the generation of new runs from more deprived areas is prioritised over new runs from less deprived areas.
-We also explored the following alternative specifications: 1. minimise deprivation-weighted distances; 2. maximise the total (i.e. unweighted) number of runs; 3. Minimise (unweighted) distances.
+  In order to identify the optimal 200 new locations for setting up new parkun events, the selection procedure is repeated 200 times. At each step, the single best candidate green space location is selected, added to the set of established parkrun events $E$, and removed from the set of available green spaces $C$. This means, the optimal green space selected at step $k$ is is taken into account when selecting the $k$th+1 location.
 
 
-\subsubsection*{Location-allocation analysis}
-We developed a flexible algorithm to select the optimal new parkrun event locations from the set of candidate green spaces. The algorithm consists of two steps: firstly, for each green space, we evaluate how many new runs (weighted by squared LSOA IMD score) would be generated by setting up a new parkrun event at the respective location. Secondly, the green space with the greatest effect on new runs is selected. This procedure is repeated 200 times.
+#### Evaluating the location allocation analysis
 
-\bigskip
-
-More formally, we define that for any candidate green space location j, the objective function $f(j|E)$ provides the sum of parkrun runs $r_{i}$ over all LSOA $i$, weighted by the squared IMD score $w_{i}^{2}$, given the set of established parkrun event locations $E=\{e_{1},e_{2},...,e_{455}\}$:
-
-\[ f(j | E)=\sum_{i=1}^{32844}{ w_{i}^{2} * r_{i j}} \]
+  We assessed the overall impact of setting up 200 new parkrun events at the identified optimal location on the geographic access to parkrun events in England. We also conducted a distributional effectiveness analysis, in which we grouped LSOAs into IMD quintiles (most, more, median, less, least deprived) and subsequently assessed how setting up the 200 new events would affect access in each of those subgroups.
 
 
-In the absence of causal estimates, we use the Poisson regression model specified above to predict the expected number of runs $r_{ij}$ for LSOA $i$ based on its IMD score $w_{i}$, its (linear) distance to the nearest parkrun event $d_{ij}$, and its population $p_{i}$. The functional form is given below.
+### Data and source code availability
 
-\[ E(r_{ij} |w_{i},d_{ij},p_{i})=\exp{( \beta_{0}+\beta_{1}*w_{i}+\beta_{2}*d_{ij}+\ln(p_{i})+\in}) \]
+  All data and the R source code that were used to generate the results of this study are provided on an open repository.[@ref]
 
-Filling-in the parameter coefficients (see table 3), we derive the following formula:
-\[ \hat{r_{ij}} = \exp{}(-5.402-0.048*w_{i}-0.082*d_{ij}+\ln(p_{i}))\]
 
-Note that $j$ can have an effect on $r_{ij}$ through $d_{ij}$: setting up a new event at location $j$ will reduce the distance to the nearest event for some LSOA $i$. This means, we evaluate the distances from LSOA $i$’s location $l_{i}$ to all established parkrun event locations $\{e_{1},e_{2},...,e_{455}\} \in E$, denoted $\overline{l_{i} e_{1}}, \overline{l_{i} e_{2}}, \ldots, \overline{l_{i} e_{455}}$, and to the candidate green space location $j$, denoted $\overline{l_{i}j}$, and then take the minimum value, i.e. $d_{ij} = \min(\overline{l_{i}j}, \overline{l_{i} e_{1} }, \overline{l_{i} e_{2}}, \ldots, \overline{l_{i} e_{455}})$.
-
-\bigskip
-
-The expected change in the objective function is computed for all candidate locations j in the set of the available green spaces $C=\{c_{1},c_{2}, \ldots, c_{2842}\}$, and the location with the maximum value is selected. The selection function is expressed in the following formula:
-
-\[\underset{j \in \mathcal{C}}{\arg \max } f(j | E)\]
-
-In order to identify the optimal set of 200 new locations $O=\{o_{1},o_{2}, \ldots, o_{200}\}$, the selection procedure is repeated 200 times. At each step $k$, the best candidate green space location $o_{k} \in C$ is selected, added to the set of established parkrun events $E$, and removed from the set of available green spaces $C$. Thereby, the $k$th new parkrun event location is taken into account when selecting the $k$th+1 location. The full algorithm can be described in pseudo code in the following way: 
-
-\bigskip
-
-\subsection*{Interactive map, source code and data}
-
-We mapped all relevant data points, including LSOAs, green spaces, parkrun events, and recommended new event locations, and created an interactive map, which can be accessed online [16]. An annotated version of the R source code and all data that were used to generate the results of this study are provided on a repository under a creative commons license [17]. 
-
-\bigskip
-
-\subsection*{Ethical approval}
-Ethical approval was obtained from the Sheffield Hallam University Ethics Committee (ER10776545). We did not collect any personal information, but only used aggregate secondary data. The parkrun Research Board approved this research project, and four of its members (AMB, HQ, EG, SSJH) were actively involved in the intepretation of findings and writing of this manuscript.
+### Ethical approval
+  
+  Ethical approval was obtained from the Sheffield Hallam University Ethics Committee (ER10776545). We did not collect any personal information, but only used aggregate secondary data. The parkrun Research Board approved this research project, and four of its members (AMB, HQ, EG, SSJH) were actively involved in the interpretation of findings and writing of this manuscript.
 
 ## Results
 
+### Descriptive statistics
+
+  As of 12th December 2018, approximately 7%, 69%, and 91% of the English population lived within 1, 5, and 10km of a parkrun event. Only 578,043 people (1% of the English population) lived more than 20km from an event. The average (SD) and median (IQR) distance to the nearest parkrun event were 4.65 (4.22) and 3.39 (1.99-5.83). The worst access was observed for 2,259 people living on the Isles of Scilly, who live about 76.44km (as the crow flies) away from the next parkrun event on the mainland. Further descriptive statistics are provided in table 1.
+
+
+| **Table 1: Descriptive statistics of LSOAs and parkrun events** |
+| ---|---|---|--- |
+| <td colspan=4>**LSOA (n =n 32,844) ** |
+| ---|---|---|--- |
+| |Mean (SD) | Median (Q1-Q3) | Range |
+| Population | 1,693.44 (405.35) | 1,612 (1,452-1,834) | 362-13,404 |
+| IMD score | 21.67 (15.59) | 17.40 (9.65-30.07) | 0.48-92.60 |
+| Distance to the nearest parkrun event location | 4.65 (4.22) | 3.39 (1.99-5.83) | 0.04-76.44 |
+|
+| <td colspan=4>**Parkrun Events (n = 465)** |
+| ---|---|---|--- |
+| Served LSOAs\* | 70.63 (42.81) | 62 (40-87) | 6-350 |
+| Served population\* | 119,612 (74,290) | 103,952 (68,837-151,488) | 7,855-628,010 |
+| ---|---|---|--- |
+ | \* Number of LSOAs or population for which a given parkrun event is the nearest. |
+
+### Association between Deprivation and Access
+
+There was a negative relationship between IMD and the distance to the nearest parkrun event: the (population weighted) Pearson and Spearman correlation coefficients were -0.15 and -0.18, indicating a small effect. This means, more deprived LSOAs tended to have shorter distances to the nearest parkun event, i.e. better access. 
+
+The distributional analysis of distances by IMD quantile showed that people living in the 20% most deprived LSOAs  had the best geographic access, with an average and median distance to the nearest parkrun event of 3.51 and 2.79 km. Depending on the metric, the worst access was observed for LSOAs in the middle (mean distance = 3.36km) or the less deprived group (median distance = 3.93km). Further results of the distributional analysis are shown in Table 2 in the following section. 
+
+
+### Optimal locations for new parkrun events
+
+Figure 1 shows the parkrun events (black circles) that existed on 12th December 2018 alongside recommendations for 200 additional event locations (red triangles), which maximise overall access to parkrun for the greatest number of people. The numbers correspond to the rank, where 1 is the location which would improve access the most. The names and exact locations of the selected 200 green spaces are provided in the appendix.
+
+
+![](./output/map_static.jpeg)
+**Figure 1: Map of England showing current parkrun events (blue circles) and recommended new event locations (red triangles) ranked in descending order of estimated effect on overall population-weighted access. Information on all 200 identified optimal green space locations are provided in the appendix.**
+
+We estimated that setting up new parkrun events in those 200 green spaces would improve access for around 16.5 million people (30% of th population) from 9,854 LSOAs. For those, the distance to the nearest event would, on average, be reduced by 4.09 km (SD = 3.97). The percentage of people who live within 5km of a parkrun would increase from 69% to 81.9%.
+
+Table 2 shows the difference in geographic access before and after the introduction of the 200 new parkrun events at the identified optimal green spaces. Results are presented for the overall effect and stratified by IMD quantiles. The 200 new events amplified the relationship between IMD and geographic access further: the population-weighted Pearson and Spearman correlation coefficients changed from -0.15 and -0.18 before, to -0.20 and -0.23 afterwards. Nevertheless, the improvement in access was smallest for LSOAs in the most deprived quantile.
+
+Figure 2 shows the distribution of the nearest distances between LSOAs and parkrun events before and after the introduction of the 200 new optimal event locations.
+
+![](./output/hist.png)
+**Figure 2: caption**
+
+```{r}
+# Table 2
+# quantile(lsoa_sp$imd_sc,seq(0,1,0.2))
+# cbind(mndst_tbl,mndst_new_tbl)
+```
+
+
+
 ## Discussion
+
+<!-- Main findings -->
+- Access to parkrun is good
+- Contrary to our expectation, we did not find that access is better for people living in less deprived areas. On the contrary, people in the most deprived areas had the best geographic access.
+- setting up 200 new events in optimal green spaces would further improve access for a large part of the population. 
+- Setting up new events in the way we proposed would again benefit 
+
+<!-- further considerations -->
+- an explanation for the negative association between IMD and distance is urban/rural: deprived areas tend to cluster in cities and this is also where most parkruns take place
+
+
+<!-- link to relevant studies -->
+
+<!-- strengths & limitations -->
+- first quantitative analysis
+- geographic access is not travel distance or travel time
+- greenspace: not all are suitable, and some suitable places (promenades, beaces, national parks) are not included. However, green spaces are distrubuted over England and it seems unlikely that any important area was missed completely.
+
+<!-- main discussion points -->
+1 ) - proximity only provides the opportunity to participate in parkrun events
+  - in a previous study we found that after controlling for distance and other factors, people from deprived areas are less likely to participate in parkrun events.
+  - this means, giving access is neccessary but not sufficient to increase participation from deprivied communities.
+  - parkrun should complement their efforts with...
+
+2 ) - future research should build on this work and develop a model to assess the (cost-)effectiveness of setting up new events not only in terms of improved potential access, but actual participation. This requires estimating causal and marginal effects. More, longitudinal data and more sophisticated modelling are required.
+
+
+<!-- end on positive note -->
+
+- parkrun is hugely succesfull and has the potential to improve levels of physcial activity of the pop?
+
 
 ## Conclusion
 

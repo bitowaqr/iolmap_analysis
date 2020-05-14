@@ -2,33 +2,33 @@
 # LOAD, MERGE, AND COMPUTE THE REQUIRED DATA
 
 # LOAD FUNCTIONS + PACKAGES
-  # Load functions
-  #  source("./src/src1_functions.R") # required
-  
   # Install and load all required packages
     install_n_load(c("raster",
                      "sp",
+                     "sf",
+                     "mapproj",
+                     "scales",
                      "geosphere",
                      "rgeos",
+                     "reshape2",
                      "dplyr",
                      "ggplot2",
+                     "eq5d",
+                     "cowplot",
                      "ggrepel",
+                     "lwgeom",
                      "maptools",
-                     "ggmap")
+                     "ggmap",
+                     "wCorr")
                    )
   
 # LOAD RAW DATA
-    # LSOA polygon geospatial data 
-      # Contains public sector information licensed under the Open Government Licence v3.
-      # Office for National Statistics (2011). 2011 Census: boundary data (England and Wales) [data collection].
-      # Retrieved from: https://data.gov.uk/dataset/fa883558-22fb-4a1a-8529-cffdee47d500/lower-layer-super-output-area-lsoa-boundaries
-      lsoa_sp = raster::shapefile("./input/England_lsoa_2011_sgen_clipped/england_lsoa_2011_sgen_clipped")
     
     # LSOA population-weighted centroids
       # Contains public sector information licensed under the Open Government Licence v3.
       # Office for National Statistics (2011). 2011 Census: boundary data (England and Wales) [data collection].
       # Retrieved from: https://data.gov.uk/dataset/a40f54f7-b123-4185-952f-da90c56b0564/lower-layer-super-output-areas-december-2011-population-weighted-centroids
-      lsoa_cntrds = raster::shapefile("./input/England_lsoa_2011_centroids/england_lsoa_2011_centroids")
+      lsoa_sp = raster::shapefile("./input/England_lsoa_2011_centroids/england_lsoa_2011_centroids")
       
     # LSOA population + LSOA area sizes
       # Contains public sector information licensed under the Open Government Licence v3.
@@ -42,6 +42,12 @@
       # Retrieved from: https://www.gov.uk/government/statistics/english-indices-of-deprivation-2015
       lsoa_imd = read.csv("./input/IMD_data/IMD_data.csv",stringsAsFactors = F)
     
+    # LSOA polygons/shapefiles   
+      lsoa_pg = st_read("./input/England_lsoa_2011_sgen_clipped/england_lsoa_2011_sgen_clipped.shp")
+      lsoa_pg = st_transform(lsoa_pg,CRS("+proj=longlat"))
+      lsoa_pg = st_make_valid(lsoa_pg)
+      england_sp = sf::st_union(lsoa_pg,by_feature=F)
+      
     # GREEN SPACES 
       # Ordnance Survey. OS Open Greenspace. 2018. 
       # Licensed under the Open Government Licence v3.
@@ -51,49 +57,65 @@
     # parkrun event data 
       # Parkrun UK. 2019. 
       # Retrieved from: http://www.parkrun.org.uk/
-      event_sp = read.csv("./input/parkrun_data/event_info_20181231.csv", stringsAsFactors = F)
-    
-    # LSOA parkrun participation data (raw data from parkrunUK, filtered and processed)
-      # Parkrun UK. 2018. 
-      # runs_per_lsoa = read.csv("./input/parkrun_data/runs_per_lsoa_010118_101218.csv", stringsAsFactors = F)
-    
-
+      event_sp = read.csv("./input/parkrun_data/event_info_20181212.csv", stringsAsFactors = F)
       
+    
 # PROCESS DATA
   
   # LSOA DATA 
-    # init lsoa_sp: correct projection
+      # location
       lsoa_sp = spTransform(lsoa_sp,CRS("+proj=longlat"))
-    # add population weighted centroids to lsoa_sp
-      lsoa_cntrds = spTransform(lsoa_cntrds,CRS("+proj=longlat"))
-      lsoa_cntrds_coord = coordinates(lsoa_cntrds)
-      lsoa_cntrds_coord_df = data.frame(code = lsoa_cntrds@data$code,
-                                        centr_lng = lsoa_cntrds_coord[,1],
-                                        centr_lat = lsoa_cntrds_coord[,2],
-                                        stringsAsFactors = F
-                                        )
-      lsoa_sp = merge(lsoa_sp,lsoa_cntrds_coord_df,by=c("code"),sort=F)
       
-    # add population + density figures to lsoa_sp
-      lsoa_pop = lsoa_pop[,c(1,3,4,5)]
-      names(lsoa_pop) = c("code","pop","area_km2","pop_km2")
-      lsoa_pop$pop = as.numeric(gsub(",","",lsoa_pop$pop))
-      lsoa_pop$pop_km2 = as.numeric(gsub(",","",lsoa_pop$pop_km2))
+      # add population + pop.density
+      lsoa_pop = lsoa_pop %>% 
+        rename("code" = 1,
+               "pop" = 3) %>%
+        select(1,3) %>%
+        mutate(pop = gsub(",","",pop)) %>%
+        mutate(pop = as.numeric(pop))
       lsoa_sp = merge(lsoa_sp,lsoa_pop,by=c("code"),sort=F)
-    
-    # # add time var (observational period = 49 weeks)
-    #   lsoa_sp@data$week = 49
-    
-    # prepare imd scores 
+      
+      # prepare imd scores 
       lsoa_imd = lsoa_imd %>% 
-        dplyr::rename(code = LSOA.code..2011.) %>% 
-        dplyr::rename(imd_sc = 'Index.of.Multiple.Deprivation..IMD..Score') %>%
-        dplyr::select(c("code","imd_sc"))
+        dplyr::rename(code = LSOA.code..2011.,
+                      imd_sc = 'Index.of.Multiple.Deprivation..IMD..Score',
+                      imd_ra = 'Index.of.Multiple.Deprivation..IMD..Rank..where.1.is.most.deprived.'
+                      ) %>%
+        dplyr::select(c("code","imd_sc","imd_ra")) %>%
+        mutate(imd_q5 = cut(imd_sc,quantile(imd_sc,seq(0,1,0.2)),
+                            labels=c("Least deprived","Less deprived","Median deprived","More deprived","Most deprived")))
+      
       lsoa_sp = merge(lsoa_sp,lsoa_imd,by=c("code"),sort=F)
-  
+      
   # PARKRUN EVENTS
       coordinates(event_sp) = ~lng+lat
       projection(event_sp) = "+proj=longlat +ellps=WGS84"
+      
+  # DISTANCE DATA
+      # COMPUTE distances matrix (distances between all LSOA and all parkrun events)
+      dist_M_full = geosphere::distm(coordinates(lsoa_sp),
+                                     coordinates(event_sp))
+      
+    # distance to the narest event for each LSOA
+      lsoa_min_dist = apply(dist_M_full,1,FUN= function(x){round(min(x),0)} )
+      lsoa_sp$mn_dstn = lsoa_min_dist / 1000
+      
+    # determine name of nearest parkrun event
+      lsoa_min_dist_event = apply(dist_M_full,1,FUN= function(x){which(x == min(x))} )
+      lsoa_min_dist_event = data.frame(code = lsoa_sp$code,nrst_evnt =  event_sp$course[lsoa_min_dist_event])
+      lsoa_sp = merge(lsoa_sp,lsoa_min_dist_event,by="code")
+      
+      
+      # parkrun event stats: how large is the catchment area?
+      srvd_lsoa = apply(dist_M_full,1,FUN= function(x){which(x == min(x))} )
+      srvd_pop = data.frame(code = lsoa_sp$code,course = event_sp$course[as.numeric(srvd_lsoa)])
+      srvd_pop$srvd_pop = lsoa_sp$pop[match(srvd_pop$code,lsoa_sp$code)]
+      srvd_pop = aggregate(srvd_pop ~course ,srvd_pop,sum)
+      srvd_lsoa = table(srvd_lsoa)
+      srvd_lsoa = data.frame(course = event_sp$course,srvd_lsoa = as.numeric(srvd_lsoa))
+      event_sp = merge(event_sp,srvd_lsoa,by="course")
+      event_sp = merge(event_sp,srvd_pop,by="course")
+      
       
   # GREENSPACES 
       # trimming of the original data set (data cannot be provided via this repository due to file size restrictions)
@@ -113,39 +135,8 @@
       # shapefile(greens_sp,filename="./input/greenspaces_data/trimmed_greenspaces.shp") # save trimmed data set
       greens_sp = raster::shapefile("./input/greenspaces_data/trimmed_greenspaces")
   
-  # DISTANCE DATA
-    # COMPUTE distances matrix (distances between all LSOA and all parkrun events)
-      dist_M_full = geosphere::distm(cbind(lsoa_sp$centr_lng,lsoa_sp$centr_lat),coordinates(event_sp))
-      rownames(dist_M_full) = lsoa_sp$code
-      colnames(dist_M_full) = event_sp$course 
-    # distance to the narest event for each LSOA
-      lsoa_min_dist = apply(dist_M_full,1,FUN= function(x){round(min(x),0)} )
-      lsoa_sp$mn_dstn = lsoa_min_dist / 1000
-    # determine name of nearest parkrun event
-      lsoa_min_dist_event = apply(dist_M_full,1,FUN= function(x){which(x == min(x))} )
-      lsoa_min_dist_event = data.frame(code = row.names(dist_M_full),nrst_evnt =  colnames(dist_M_full)[lsoa_min_dist_event])
-      lsoa_sp = merge(lsoa_sp,lsoa_min_dist_event,by="code")
-    
-    # For the parkrun events: how large is the catchment area?
-      # i.e. for how many LSOAs/people is the event the nearest?
-      srvd_lsoa = apply(dist_M_full,1,FUN= function(x){which(x == min(x))} )
-      srvd_pop = data.frame(code = names(srvd_lsoa),course = colnames(dist_M_full)[as.numeric(srvd_lsoa)])
-      srvd_pop$srvd_pop = lsoa_sp@data$pop[match(srvd_pop$code,lsoa_sp@data$code)]
-      srvd_pop = aggregate(srvd_pop ~course ,srvd_pop,sum)
-      srvd_lsoa = table(srvd_lsoa)
-      srvd_lsoa = data.frame(course = colnames(dist_M_full),srvd_lsoa = as.numeric(srvd_lsoa))
-      event_sp = merge(event_sp,srvd_lsoa,by="course")
-      event_sp = merge(event_sp,srvd_pop,by="course")
-    
-  
-  # # PARTICIPATION data
-  #   # prepare runs per week, per 1,000 population
-  #     lsoa_sp = merge(lsoa_sp,runs_per_lsoa,by="code",sort=F)
-  #     lsoa_sp$run_count[is.na(lsoa_sp$run_count)] = 0
-  #     lsoa_sp$runs_pmil.week = ((lsoa_sp$run_count/49)/lsoa_sp$pop)*1000 # 49 weeks observational period
-    
 # CLEAN UP
-    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","runs_per_lsoa","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_cntrds_coord_df","lsoa_pop","lsoa_cntrds","lsoa_cntrds_coord","events_in_england","prisonruns","inPrisons"))
+    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_pop","lsoa_cntrds"))
 
 # SAVE the created data sets (saves time for later use)
     save(list=c("dist_M_full","event_sp","greens_sp","lsoa_min_dist","lsoa_sp"),
