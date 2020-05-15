@@ -1,8 +1,7 @@
 
-# LOAD, MERGE, AND COMPUTE THE REQUIRED DATA
+# SRC 2: Load and process data
 
-# LOAD FUNCTIONS + PACKAGES
-  # Install and load all required packages
+# Load pkgs -------
     install_n_load(c("raster",
                      "sp",
                      "sf",
@@ -22,7 +21,7 @@
                      "wCorr")
                    )
   
-# LOAD RAW DATA
+# Load raw data -------
     
     # LSOA population-weighted centroids
       # Contains public sector information licensed under the Open Government Licence v3.
@@ -60,7 +59,7 @@
       event_sp = read.csv("./input/parkrun_data/event_info_20181212.csv", stringsAsFactors = F)
       
     
-# PROCESS DATA
+# Process and combine data --------
   
   # LSOA DATA 
       # location

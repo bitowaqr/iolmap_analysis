@@ -1,6 +1,6 @@
 
 
-# FUNCTIONS
+# SRC 1: FUNCTIONS
   
 # convenient function to install (if neccessary) and load required packages
 install_n_load = function(package){
@@ -24,13 +24,15 @@ install_n_load = function(package){
                      min.d = min(x),
                      max.d = max(x)
     )
-   round(res,round.dec) 
+    res  = c(unlist(lapply(res,function(x){formatC(x,format="f",big.mark = ",",digits = round.dec)})))
+    res = data.frame(t(res))
+    return(res)
   }
   
 # format descriptive tbl 
   format.tbl = function(desc_tbl1,cols){
     desc_tbl1 = cbind(paste(desc_tbl1$mean.d," (",desc_tbl1$sd.d,")",sep=""),
-                      paste(desc_tbl1$median.d," (",desc_tbl1$q25.d,";",desc_tbl1$q75.d ,")",sep=""),
+                      paste(desc_tbl1$median.d," (",desc_tbl1$q25.d,"; ",desc_tbl1$q75.d ,")",sep=""),
                       paste(desc_tbl1$min.d,"-",desc_tbl1$max.d,sep=""))
     rownames(desc_tbl1) = cols
     colnames(desc_tbl1) = c("Mean (SD)","Median (Q25-Q75)","Range")
@@ -131,7 +133,9 @@ install_n_load = function(package){
                 ylim=c( lat1-space.bottom,lat2+space.top)) +
       # remove labels
       xlab("") +
-      ylab("") 
+      ylab("")  +
+      theme(axis.text =  element_blank(),
+            axis.ticks = element_blank())
     
     return(static_map)
   }
@@ -145,6 +149,7 @@ install_n_load = function(package){
       name.park[is.na(name.park)] = "unnamed"
       legend_m1 = cbind("Pos"=LocAloAlg_res$pos,
                         "Park"=name.park,
+                        "Wtd. average distance"=round(LocAloAlg_res$objective/1000,2),
                         "Change (%)"=LocAloAlg_res$change,
                         "Area (km2)"=formatC(LocAloAlg_res$area_km2,digits = 2, format = "f"),
                         "Longitude"=round(LocAloAlg_res$lon,digits),

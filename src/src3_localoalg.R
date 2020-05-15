@@ -93,7 +93,7 @@
   t2-t1
   # prepare results 
     top_consecutive_parks = greens_sp@data[res_df$index,]
-    top_consecutive_parks$objective = res_df$objective[-1]/1e+9 # in millions
+    top_consecutive_parks$objective = res_df$objective[-1]/sum(lsoa.pop)
     top_consecutive_parks$change = res_df$change[-1]
     top_consecutive_parks$lon = candidates.coord[res_df$index,1]
     top_consecutive_parks$lat = candidates.coord[res_df$index,2]
@@ -101,17 +101,39 @@
   
     write.csv(top_consecutive_parks,"./output/optimal_locations.csv",row.names = F)
 
+    
+# Track change in pop. weighted average distance over steps 1:200
+    obj.changes = res_df$objective/sum(lsoa.pop)
+    obj.changes = round(obj.changes/1000,8)
+    k.step = 0:top_n
+    k.change = c()
+    for(i in 2:length(obj.changes)){
+      k.change = c(k.change,obj.changes[i]-obj.changes[i-1])
+    }
+    
+    k.step.plot = plot_grid(
+                    ggplot()+
+                    geom_point(aes(x=k.step,y=obj.changes)) +
+                    geom_line(aes(x=k.step,y=obj.changes)) +
+                    theme_minimal()+
+                    ggtitle("Pop. weighted average distance to the nearest parkrun event"),
+                  ggplot()+
+                    geom_point(aes(x=k.step[-1],y=k.change)) +
+                    geom_line(aes(x=k.step[-1],y=k.change)) +
+                    theme_minimal()+
+                    ggtitle("Difference from previous step"),
+                  nrow = 1
+                    )
+    
+    ggsave(k.step.plot,filename = "./output/kstep_change.png",width = 10,height = 5)
 
     
-    
-    
-    
-# / -------
 # 4 CREATE STATIC MAPS FOR PUBLICATION -------
-# the functions below use google maps API to retrieve the baseline tile
-# to use this function, you need a api key
-# For more details, see: https://developers.google.com/maps/documentation/maps-static/intro
+  # the functions below use google maps API to retrieve the baseline tile
+  # to use this function, you need a api key
+  # For more details, see: https://developers.google.com/maps/documentation/maps-static/intro
     if(file.exists(".key.txt")){
+      # I store my api key locally in a '.key.txt' file
       my_api_key = readChar(".key.txt",nchars = 100)
     } else {
       cat("Google API key required \n For more details, see: https://developers.google.com/maps/documentation/maps-static/intro")
@@ -152,8 +174,9 @@
     lsoa_sp$mn_dstn_diff = lsoa_sp$mn_dstn - lsoa_sp$mn_dstn_new
     
     
-    
-    
+  # SAVE    
+    save(list=c("lsoa_min_dist_new","dist_M_new","after_events","top_consecutive_parks","lsoa_sp"),
+         file = paste("./output/savegame2_", Sys.Date(),".Rdata",sep=""))
     
     
     
