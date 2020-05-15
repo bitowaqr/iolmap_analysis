@@ -17,16 +17,16 @@ csl: vancouver.csl
 
 ## Introduction
 
-Insufficient physical activity is a leading cause of disease and disability worldwide.[@who2009] In the UK, around one in six deaths is attributable to low levels of physical activity.[@lee2012] It is also a major contributor to health inequalities, as people from low socio-economic background are more likely to be inactive [@farrell2014socioeconomic] and are disproportionately affected by physical inactivity-related diseases [@tanaka2018socioeconomic]. Increasing the physical activity levels of the population is therefore high on the public health agenda: it not only has the potential to improve quality of life, reduce mortality rates and alleviate the strain on health and social care services, but also reduce the gap in health inequalities. 
+Insufficient physical activity is a leading cause of disease and disability worldwide.[@who2009] For the UK, around one in six deaths is attributable to low levels of physical activity.[@lee2012] It is also a major contributor to health inequalities, as people from low socio-economic background are disproportionately affected by physical inactivity-related diseases. Increasing the physical activity levels of the population is therefore high on the public health agenda: it not only has the potential to improve quality of life, reduce mortality rates and alleviate the strain on health and social care services, but also reduce the gap in health inequalities. 
 
 However, designing effective public health interventions that increase population physical activity is considerable challenge.[@ref] Implementing such interventions in a way that does not increase health inequalities might even be more difficult, as studies have shown that programmes to increase physical activity often fail to reach deprived communities and those most in need.[@white2009; @rideout2018]
 
 
-parkrun, an international movement which organises free weekly 5km running events, might provide valuable lessons for public health professional with respect to both. Since its founding in 2004, as a small event in London with 13 participants, it has grown to become one of the world's largest mass participation sporting events, with up to 360,000 participants in more than 20 countries.[@ref] The volunteer-led running events are often characterised as accessible and inclusive.[@stevinson2015] The organisation has been widely praised as being successful in encouraging participation, particularly in individuals who were previously inactive or did not meet public health guidelines.[@stevinson2004; @wiltshire2018] 
+parkrun, an international movement which organises free weekly 5km running events, might provide valuable lessons for public health professionals with respect to both. Since its founding in 2004, as a small event in London with 13 participants, it has grown to become one of the world's largest mass sporting events, with up to 360,000 participants in more than 20 countries.[@ref] The volunteer-led running events are often characterised as accessible and inclusive.[@stevinson2015] The organisation has been widely praised as being successful in encouraging participation particularly in individuals who were previously inactive.[@stevinson2004; @wiltshire2018] 
 
-Notwithstanding these subjective accounts, the expansion of parkrun in England, as elsewhere, has been largely grassroots, driven by *demand* rather than *need*. It might therefore be the case that parkrun events are primarily located in areas that are relatively affluent, while people living in more deprived communities may not have the same opportunities to participate. In 2019, Sport England announced funding to support the creation of 200 new parkrun events across England within three years, with the specific aim of increasing participation of individuals from lower socio-economic groups.[@sportengland2018] 
+Notwithstanding these subjective accounts, the expansion of parkrun in England, as elsewhere, has been largely driven by *demand*, not *need*. It might therefore be the case that parkrun events are primarily located in areas that are relatively well-off anyway, while people living in more deprived communities may not have the same opportunities to participate. In 2019, Sport England announced funding to support the creation of 200 new parkrun events across England within three years, with the specific aim of increasing participation of individuals from lower socio-economic groups.[@sportengland2018] 
 
-The aims of this study are two-fold: firstly, to evaluate whether geographic access to parkrun events in England is equitable across areas with different levels of deprivation. Secondly, to identify 200 optimal locations for future events in order to improve geographic access, in particular for deprived communities.
+The aims of this study are two-fold: firstly, to evaluate whether geographic access to parkrun events in England igeographic access to parkrun events in England is equitable across areas with different levels of deprivation. Secondly, to identify 200 optimal locations for future events in order geographic access to parkrun events in England is equitable across areas with different levels of deprivation. Secondly, to identify 200 optimal locations for future events in order improve geographic access, in particular for deprived communities.
 
 
 ## Methods
@@ -147,7 +147,7 @@ library(knitr)
 library(kableExtra)
 
 kable(distr.res,
-      caption = "Distributional analysis",
+      caption = "Distributional analysis. The table shows the access to parkrun events before and after 200 new parkrun events are set up at optimal green spaces, stratified by IMD quintiles",
       format = "latex",
       # longtable = T, 
       booktabs = T) %>%
@@ -157,62 +157,29 @@ kable(distr.res,
 ```
 
 
-
-
 ## Discussion
 
 
-Overall, geographic access to parkrun in England is good. On 12th December 2018 more than two thirds of the population lived within 5km (the parkrun distance) of a parkrun event. Contrary to our expectation, we did not find that access was better for people living in more affluent areas. In fact, those living in the most deprived areas had the best geographic access to parkrun.
+Overall, geographic access to parkrun in England is good. On 12th December 2018 more than two thirds of the population lived within 5km (the parkrun distance) of a parkrun event. Contrary to our expectation, we did not find that access was better for people living in more affluent areas. In fact, those living in the most deprived areas had the best geographic access to parkrun. It is rare in public health for inequalities to exist in this direction.
 
-Our analysis has shown that setting up 200 new events in the optimal green spaces in England would increase the percentage of English residents who live within 5k of a parkrun to 82%. This would increase the inequity in access to parkrun events, improving the geographic access of the most deprived more than the access of those living in more affluent areas. It is rare in public health for inequity to exist in this direction.
+Our analysis has shown that setting up 200 new events in the recommended (optimal) green spaces in England would considerably improve access - for example, the percentage of English residents who live within 5km of a parkrun would increase to 82%. Moreover, the recommended expansion of parkrun would improve the geographic access for the most deprived communities more than the access of those living in more affluent areas. 
 
-While our analysis has not been concerned with confounding factors, we are interested only in geographic access based on multiple deprivation, an explanation for the negative relationship between IMD and access is population density. Since deprived areas cluster in cities, geographical access as the crow flies tends to be better for these areas in part because population density is itself a predictor of the existence of parkrun events.
+Our analysis has not been concerned with confounding factors, as we were interested only in determining to what extent deprived communities have access to parkrun events - not what factors independently explain access more generally. It should be noted, however, that a contributing factor for the negative relationship between IMD and access is likely to be population density: deprived areas cluster in ubran areas, where also most parkun events take place. Rural areas, on the other hand, generally have worse geographical access as the crow flies.
 
-There are several strengths of this study, it is the first study of geographic access to parkrun in England - therefore the approach is novel and the data untapped. Secondly the analysis makes use of large and rich datasets, with over 30,000 LSOA and over 400 existing parkrun events it is unlikely that individual outliers are affecting the results.
-
-However, there are also limitations. Most importantly geographic access is not travel distance, or travel time. In some cases, for example where natural barriers like lakes or rivers block routes, the actual distance travelled may be far in excess of the distance as the crow flies. Also, in rural areas where car use is more prevalent travel time my be shorter, despite travel distances being longer. Further investigation could determine how perceptions of access change with distance in different settings (e.g. rural vs urban).
+There are several strengths of this study that derserve metion. Firstly, it is the first study of geographic access to parkrun in England - therefore the approach is novel and the data untapped. Secondly the analysis makes use of large and rich datasets, with over 30,000 LSOA and over 400 existing parkrun events it is unlikely that individual outliers are affecting the results. However, there are also limitations. Most importantly geographic access is not measured as travel distance, or travel time. In some cases, for example where natural barriers like lakes or rivers block routes, the actual distance travelled may be far in excess of the distance as the crow flies. Also, in rural areas where car use is more prevalent travel time may be shorter, despite travel distances being longer. Further investigation could determine how perceptions of access change with distance in different settings (e.g. rural vs urban).
 
 The choice of 0.1sq-km for greenspaces may also surprise some readers. However, several parkruns exist in very small areas (Mile End park in London, and Cudmore Grove park in Essex are 0.14sq-km and 0.12sq-km respectively). We therefore chose to maximize sensitivity, at the likely expense of specificity, and therefore it is possible that some of the recommendations are in parks that are not suitable to host a parkrun event. Conversely, many blue spaces such as beaches and promenades are not included in the database and therefore there may exist some locations which we have missed, particularly in coastal areas.
 
-The main finding, that geographical access to parkrun events is better in more deprived communities, is surprising given that we know that participation in parkrun has a strong socioeconomic gradient with higher participation rates in more affluent areas (ref). This suggests that providing the opportunity to participate in parkrun events, while a necessary first step to enable participation, has not been enough to engage deprived communities and reduce inequity.
+The main finding, that geographical access to parkrun events is better in more deprived communities, is surprising given that in a previous study we found that participation in parkrun has a strong socioeconomic gradient with considerably higher participation rates in more affluent areas. About a third of all participants came from LSOAs in the least deprived quintile, while only a third came from the most deprived quintile.[@smithschneider; @schneidersmith] This suggests that providing the opportunity to participate in parkrun events, while a necessary first step to enable participation, has not been sufficient to engage deprived communities.
 
 Investigating other barriers to participation in parkrun is likely to improve our understanding of the reasons why physical activity levels are lower in more deprived areas in general, and give parkrun the information it needs to develop strategies, other than improving access, to engage those who live in deprived communities. Future research should build on this work and develop a model to assess the (cost-)effectiveness of setting up new events, and other strategies, not only in terms of improved potential access, but actual participation. This requires estimating the causal and marginal effects of different interventions on participation, and therefore physical activity levels, using longitudinal data and sophisticated modelling techniques.
 
-parkrun has been hugely successful in encouraging physical activity worldwide, it will achieve its vision of a ‘healthier, happier planet’, but the extent of its impact will be dependent on how well it is able to understand the drivers of participation and develop strategies to over-come the hurdles it identifies.
-
-
-<!-- Main findings 
-- Access to parkrun is good
-- Contrary to our expectation, we did not find that access is better for people living in less deprived areas. On the contrary, people in the most deprived areas had the best geographic access.
-- setting up 200 new events in optimal green spaces would further improve access for a large part of the population. 
-- Setting up new events in the way we proposed would again benefit 
-
-further considerations 
-- an explanation for the negative association between IMD and distance is urban/rural: deprived areas tend to cluster in cities and this is also where most parkruns take place
-
-
-link to relevant studies 
-
-trengths & limitations
-- first quantitative analysis
-- geographic access is not travel distance or travel time
-- greenspace: not all are suitable, and some suitable places (promenades, beaces, national parks) are not included. However, green spaces are distrubuted over England and it seems unlikely that any important area was missed completely.
-
-main discussion points 
-1 ) - proximity only provides the opportunity to participate in parkrun events
-  - in a previous study we found that after controlling for distance and other factors, people from deprived areas are less likely to participate in parkrun events.
-  - this means, giving access is neccessary but not sufficient to increase participation from deprivied communities.
-  - parkrun should complement their efforts with...
-
-2 ) - future research should build on this work and develop a model to assess the (cost-)effectiveness of setting up new events not only in terms of improved potential access, but actual participation. This requires estimating causal and marginal effects. More, longitudinal data and more sophisticated modelling are required.
-
-
-end on positive note
-
-- parkrun is hugely succesfull and has the potential to improve levels of physcial activity of the pop?
--->
+parkrun's stated mission is to create a 'healthier, happier planet' and so far they have been hugely successful in encouraging physical activity worldwide.[@parkrun2017] Our analysis has furthermore shown that parkrun events are, in principle, available to anyone, irrespective of their socio-economic background. However, the extent of parkrun's overall impact on health inequalities will be dependent on how well they are able to understand and overcome barriers to participation for deprived communties.
 
 ## Conclusion
+
+  In England, geographic access to parkrun events is good, and can be further improved with the creation of 200 new events. Contrary to our expectation, we find that geographic access is better for those living in more deprived communities. Given that participation rates are generally lower in deprived areas, improving access alone is unlikely to significantly reduce inequalities in participation and/or levels of physical activity. A deeper understanding is needed of the barriers to participation in deprived communities if strategies are going to be created to improve engagement. 
+
 
 
 ## References

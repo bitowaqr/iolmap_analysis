@@ -97,8 +97,8 @@
     # 99 rows removed
     before_after_dist = ggplot(lsoa_sp@data) +
       geom_density(aes(mn_dstn_new,fill="After 200 new parkrun events are set up"),col="black",alpha=0.5) +
-      geom_density(aes(mn_dstn,fill="Current situation (December 12th, 2018)"),col="black",alpha=0.3) +
-      scale_fill_manual(values = c("Current situation (December 12th, 2018)" = "red","After 200 new parkrun events are set up"="lightgreen"),name="") +
+      geom_density(aes(mn_dstn,fill="Current access to parkrun events (December 12th, 2018)"),col="black",alpha=0.3) +
+      scale_fill_manual(values = c( "Current access to parkrun events (December 12th, 2018)" = "red","After 200 new parkrun events are set up"="lightgreen"),name="") +
       scale_x_continuous(label=label_number(suffix = " km"),limits = c(0,25),
                          name = "Distance to the nearest parkrun event") +
       theme_minimal()+
