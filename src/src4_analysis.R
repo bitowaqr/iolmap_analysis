@@ -100,6 +100,7 @@
       geom_density(aes(mn_dstn,fill="Current access to parkrun events (December 12th, 2018)"),col="black",alpha=0.3) +
       scale_fill_manual(values = c( "Current access to parkrun events (December 12th, 2018)" = "red","After 200 new parkrun events are set up"="lightgreen"),name="") +
       scale_x_continuous(label=label_number(suffix = " km"),limits = c(0,25),
+                         scales::number_format(accuracy = 1),
                          name = "Distance to the nearest parkrun event") +
       theme_minimal()+
       theme(legend.position = "bottom")
