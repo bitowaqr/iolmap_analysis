@@ -135,7 +135,7 @@
       greens_sp = raster::shapefile("./input/greenspaces_data/trimmed_greenspaces")
   
 # CLEAN UP
-    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_pop","lsoa_cntrds"))
+    rm(list=c("lsoa_min_dist_event","srvd_lsoa","srvd_pop","MIN_PARK_AREA","greens_in_england","lsoa_imd","lsoa_pop"))
 
 # SAVE the created data sets (saves time for later use)
     save(list=c("dist_M_full","event_sp","greens_sp","lsoa_min_dist","lsoa_sp"),
