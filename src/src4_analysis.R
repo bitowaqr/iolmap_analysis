@@ -73,6 +73,7 @@
     # as is
     fit1 = lm(mn_dstn ~ imd_sc,lsoa_sp,weights = pop)
     summary(fit1)
+    
     weightedCorr(lsoa_sp$imd_sc, lsoa_sp$mn_dstn,method = "pearson",weights = lsoa_sp$pop)
     weightedCorr(lsoa_sp$imd_sc, lsoa_sp$mn_dstn,method = "spearman",weights = lsoa_sp$pop)
     
@@ -95,23 +96,23 @@
 
 # 4  Density plot  ---------------
     # 99 rows removed
-    before_after_dist = ggplot(lsoa_sp@data) +
-      geom_density(aes(mn_dstn_new,fill="After 200 new parkrun events are set up"),col="black",alpha=0.5) +
-      geom_density(aes(mn_dstn,fill="Current access to parkrun events (December 12th, 2018)"),col="black",alpha=0.3) +
-      scale_fill_manual(values = c( "Current access to parkrun events (December 12th, 2018)" = "red","After 200 new parkrun events are set up"="lightgreen"),name="") +
-      scale_x_continuous(label=scales::number_format(accuracy = 1,suffix = " km"),
-                         limits = c(0,25),
-                         name = "Distance to the nearest parkrun event") +
-      theme_minimal()+
-      theme(legend.position = "bottom")
-
-      ggsave(plot=before_after_dist,filename = "./output/hist.png",height=6,width=8)
+    # before_after_dist = ggplot(lsoa_sp@data) +
+    #   geom_density(aes(mn_dstn_new,fill="After 200 new parkrun events are set up"),col="black",alpha=0.5) +
+    #   geom_density(aes(mn_dstn,fill="Current access to parkrun events (December 12th, 2018)"),col="black",alpha=0.3) +
+    #   scale_fill_manual(values = c( "Current access to parkrun events (December 12th, 2018)" = "red","After 200 new parkrun events are set up"="lightgreen"),name="") +
+    #   scale_x_continuous(label=scales::number_format(accuracy = 1,suffix = " km"),
+    #                      limits = c(0,25),
+    #                      name = "Distance to the nearest parkrun event") +
+    #   theme_minimal()+
+    #   theme(legend.position = "bottom")
+    # 
+    #   ggsave(plot=before_after_dist,filename = "./output/hist.png",height=6,width=8)
       
       
 # 5  Scatter plot  ---------------
       
-    # lsoa_melt = melt(lsoa_sp@data[,c("mn_dstn","mn_dstn_new","imd_ra","imd_sc")],id.vars = c("imd_sc","imd_ra"))
-    
+    #  lsoa_melt = melt(lsoa_sp@data[,c("mn_dstn","mn_dstn_new","imd_ra","imd_sc")],id.vars = c("imd_sc","imd_ra"))
+    # 
     # ggplot(lsoa_melt) +
     #   geom_point(aes(x=(imd_ra),y=(value),col=variable),alpha=0.5,size=0.2) +
     #   geom_smooth(aes(x=(imd_ra),y=(value)),method="lm") +
@@ -119,7 +120,7 @@
     #   theme_minimal() +
     #   theme(legend.position = "none") +
     #   ylim(c(0,25))
-    
+    # 
       # levels(lsoa_melt$variable) = c("As is (12th December 2018)","After 200 new events are created")
     
     # scatter =  ggplot(lsoa_melt) +
